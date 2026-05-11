@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 // Importamos los lugares desde el contexto que ya creaste [4]
@@ -9,7 +9,10 @@ const RecenterMap = ({ coords }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (coords) map.setView(coords, 16);
+    if (!coords || !map || !map.getContainer()) return;
+
+    // En iOS/Safari puede fallar la transición de zoom al desmontar; movemos sin animación.
+    map.setView(coords, 16, { animate: false });
   }, [coords, map]);
 
   return null;
@@ -42,7 +45,7 @@ const RuteandoMap = ({ selectedCoords, onSelectedCoordsChange }) => {
     return new Date(second.date).getTime() - new Date(first.date).getTime();
   })[0];
   const placeCenter = latestPlace ? [Number(latestPlace.lat), Number(latestPlace.lng)] : [-34.6037, -58.3816];
-  const mapCenter = selectedCoords || currentCoords || placeCenter;
+  const mapCenter = useMemo(() => selectedCoords || currentCoords || placeCenter, [selectedCoords, currentCoords, placeCenter]);
   const initialZoom = latestPlace ? 16 : 12;
 
   const focusMyLocation = () => {
@@ -113,6 +116,9 @@ const RuteandoMap = ({ selectedCoords, onSelectedCoordsChange }) => {
       <MapContainer
         center={mapCenter}
         zoom={initialZoom}
+        zoomAnimation={false}
+        markerZoomAnimation={false}
+        fadeAnimation={false}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%' }}
       >
