@@ -1,0 +1,355 @@
+:root {
+  /* Paleta de colores: Naranja (Energía) y Gris (Equilibrio) [1, 2] */
+  --color-primary: #FF7A00;
+  /* Naranja vibrante para energía y creatividad */
+  --color-primary-dark: #E66E00;
+  --color-secondary: #4A4A4A;
+  /* Gris oscuro para sobriedad y contraste */
+  --color-bg-light: #F8F9FA;
+  --color-white: #FFFFFF;
+  --color-error: #D32F2F;
+
+  /* Tipografía [2] */
+  --font-main: 'Poppins', sans-serif;
+
+  /* Espaciado y bordes para estilo minimalista [1] */
+  --radius: 12px;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Reset básico y enfoque Mobile-First [3, 4] */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg-light);
+  color: var(--color-secondary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Evitar scroll horizontal y asegurar experiencia mobile [4] */
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Estilo para el bloqueo de acceso desde Desktop [4] */
+.desktop-notice {
+  display: none;
+  /* Oculto por defecto en móviles */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-white);
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Media query para mostrar el aviso solo en pantallas grandes [4] */
+@media (min-width: 1024px) {
+  .desktop-notice {
+    display: flex;
+  }
+}
+
+/* Componentes Minimalistas y Limpios [1] */
+h1,
+h2,
+h3 {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary,
+.btn-secondary-link {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover,
+.btn-secondary-link:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}
+
+.header-action-link,
+.header-action-btn {
+  border: 1px solid rgba(74, 74, 74, 0.18);
+  border-radius: 14px;
+  padding: 0.72rem 1rem;
+  min-height: 48px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  color: var(--color-secondary);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: var(--transition);
+}
+
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: auto;
+}
+
+.header-action-link {
+  background: linear-gradient(180deg, #5c6066 0%, #45494f 100%);
+  color: var(--color-white);
+  border-color: rgba(74, 74, 74, 0.4);
+}
+
+.header-action-link:hover,
+.header-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 9px 22px rgba(0, 0, 0, 0.12);
+}
+
+.header-action-btn {
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 0.45rem;
+  }
+
+  .header-action-link,
+  .header-action-btn {
+    min-height: 42px;
+    padding: 0.58rem 0.72rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+}
+
+.input-field {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1.5px solid #DDD;
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  outline: none;
+  transition: var(--transition);
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+}
+
+/* Estilo específico para el checkbox de privacidad [5] */
+.privacy-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.privacy-container input[type="checkbox"] {
+  margin-top: 4px;
+  accent-color: var(--color-primary);
+}
+
+/* Mapa (Leaflet) básico [3] */
+#map {
+  height: 300px;
+  width: 100%;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  z-index: 1;
+}
+
+/* Icono de Pin con Corazón (Clase placeholder) [1] */
+.marker-pin-heart {
+  color: var(--color-primary);
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+.map-shell {
+  position: relative;
+}
+
+.map-locate-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 500;
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-secondary);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.map-locate-btn:hover {
+  transform: translateY(-1px);
+  background: #fff;
+}
+
+.map-locate-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.map-pick-btn {
+  right: 140px;
+}
+
+.map-pick-btn.is-active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.map-location-hint {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 500;
+  background: rgba(74, 74, 74, 0.88);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
+}
+
+.btn-danger {
+  background-color: var(--color-error);
+  color: var(--color-white);
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-danger:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 27, 31, 0.55);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  z-index: 9998;
+  animation: modalFadeIn 220ms ease;
+  padding: 1rem;
+}
+
+.modal-card {
+  width: min(420px, 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fff8ef 100%);
+  border: 1px solid rgba(255, 122, 0, 0.2);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(18, 22, 33, 0.22);
+  padding: 1.2rem;
+  animation: modalPopIn 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-title {
+  margin-bottom: 0.4rem;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+}
+
+.modal-message {
+  margin-bottom: 1rem;
+  color: var(--color-secondary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.modal-actions .btn-primary,
+.modal-actions .btn-secondary {
+  width: auto;
+  min-width: 100px;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
