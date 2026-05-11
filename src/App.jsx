@@ -35,7 +35,7 @@ const RuteandoApp = () => {
   const { user, handleLogout } = useContext(AuthContext);
   const token = user?.token ?? localStorage.getItem('token');
 
-  const fallbackCategories = ['Restaurante', 'Parque', 'Museo', 'Tienda', 'Playa', 'Montaña', 'Otro'];
+  const fallbackCategories = ['CASA', 'Restaurante', 'Parque', 'Museo', 'Tienda', 'Playa', 'Montaña', 'Otro'];
 
   // Cargar categorías
   useEffect(() => {
@@ -185,6 +185,7 @@ const RuteandoApp = () => {
   // Ícono por categoría
   const getCategoryIcon = (category) => {
     const icons = {
+      'CASA': '🏠',
       'Restaurante': '🍽️',
       'Parque': '🌳',
       'Museo': '🎨',

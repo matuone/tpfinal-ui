@@ -7,7 +7,7 @@ Frontend desarrollado con React y Vite.
 - registro e inicio de sesión
 - visualización de lugares en mapa
 - bitácora de lugares del usuario autenticado
-- **categorización de lugares** (Restaurante, Parque, Museo, Tienda, Playa, Montaña, Otro)
+- **categorización de lugares** (CASA, Restaurante, Parque, Museo, Tienda, Playa, Montaña, Otro)
 - **dirección legible** obtenida automáticamente desde coordenadas (geocodificación inversa)
 - **filtrado avanzado** de lugares por nombre y categoría
 - **navegación rápida al mapa** desde la bitácora con acción por ícono (avión)
@@ -38,6 +38,7 @@ Archivos involucrados:
 ### Categorías
 
 Cada lugar puede tener una categoría:
+- CASA 🏠
 - Restaurante 🍽️
 - Parque 🌳
 - Museo 🎨
