@@ -62,6 +62,15 @@ const RuteandoMap = ({ selectedCoords, focusedCoords, onSelectedCoordsChange }) 
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const accuracy = Math.round(position.coords.accuracy);
+
+        // Evita guardar una ubicación inútil (ej: ±50km) y sugiere selección manual.
+        if (accuracy > 200) {
+          setIsLocating(false);
+          setLocationHint(`Precisión baja (±${accuracy} m). Intentá nuevamente o elegí el punto en el mapa.`);
+          return;
+        }
+
         const nextCoords = [
           Number(position.coords.latitude.toFixed(6)),
           Number(position.coords.longitude.toFixed(6)),
@@ -71,7 +80,7 @@ const RuteandoMap = ({ selectedCoords, focusedCoords, onSelectedCoordsChange }) 
           onSelectedCoordsChange(nextCoords);
         }
         setIsLocating(false);
-        setLocationHint(`Ubicación encontrada (±${Math.round(position.coords.accuracy)} m).`);
+        setLocationHint(`Ubicación encontrada (±${accuracy} m).`);
       },
       () => {
         setIsLocating(false);
