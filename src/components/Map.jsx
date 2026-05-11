@@ -33,7 +33,7 @@ const PickLocationOnClick = ({ isPicking, onPick }) => {
   return null;
 };
 
-const RuteandoMap = ({ selectedCoords, onSelectedCoordsChange }) => {
+const RuteandoMap = ({ selectedCoords, focusedCoords, onSelectedCoordsChange }) => {
   const { places } = usePlaces(); // Acceso a la lista de bitácora [4]
   const [currentCoords, setCurrentCoords] = useState(null);
   const [isLocating, setIsLocating] = useState(false);
@@ -45,7 +45,10 @@ const RuteandoMap = ({ selectedCoords, onSelectedCoordsChange }) => {
     return new Date(second.date).getTime() - new Date(first.date).getTime();
   })[0];
   const placeCenter = latestPlace ? [Number(latestPlace.lat), Number(latestPlace.lng)] : [-34.6037, -58.3816];
-  const mapCenter = useMemo(() => selectedCoords || currentCoords || placeCenter, [selectedCoords, currentCoords, placeCenter]);
+  const mapCenter = useMemo(
+    () => focusedCoords || selectedCoords || currentCoords || placeCenter,
+    [focusedCoords, selectedCoords, currentCoords, placeCenter]
+  );
   const initialZoom = latestPlace ? 16 : 12;
 
   const focusMyLocation = () => {

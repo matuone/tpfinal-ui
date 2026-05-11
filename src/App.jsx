@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { usePlaces } from './context/PlacesContext';
 import { RuteandoMap } from './components/Map';
@@ -11,7 +11,9 @@ const RuteandoApp = () => {
   const [selectedCategory, setSelectedCategory] = useState('Otro');
   const [isMobileDevice, setIsMobileDevice] = useState(true);
   const [selectedCoords, setSelectedCoords] = useState(null);
+  const [focusedCoords, setFocusedCoords] = useState(null);
   const [categories, setCategories] = useState([]);
+  const mapSectionRef = useRef(null);
 
   // Filtros
   const [filterName, setFilterName] = useState('');
@@ -201,6 +203,15 @@ const RuteandoApp = () => {
     return matchesName && matchesCategory;
   });
 
+  const focusPlaceOnMap = (place) => {
+    const coords = [Number(place.lat), Number(place.lng)];
+    setFocusedCoords(coords);
+
+    if (mapSectionRef.current) {
+      mapSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   if (!isMobileDevice) {
     return (
       <div className="desktop-notice" style={{ display: 'flex', textAlign: 'center', padding: '2rem' }}>
@@ -253,10 +264,13 @@ const RuteandoApp = () => {
         ) : null}
       </form>
 
-      <RuteandoMap
-        selectedCoords={selectedCoords}
-        onSelectedCoordsChange={setSelectedCoords}
-      />
+      <div ref={mapSectionRef}>
+        <RuteandoMap
+          selectedCoords={selectedCoords}
+          focusedCoords={focusedCoords}
+          onSelectedCoordsChange={setSelectedCoords}
+        />
+      </div>
 
       <div className="filters-section" style={{ marginTop: '2rem', background: '#f9f9f9', padding: '1rem', borderRadius: 'var(--radius)' }}>
         <button
@@ -315,7 +329,21 @@ const RuteandoApp = () => {
                   marginBottom: '1rem',
                   borderLeft: '5px solid var(--color-primary)'
                 }}>
-                  <strong style={{ fontSize: '1.1rem' }}>{getCategoryIcon(p.category)} {p.name}</strong> <br />
+                  <button
+                    type="button"
+                    onClick={() => focusPlaceOnMap(p)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      color: 'inherit'
+                    }}
+                  >
+                    <strong style={{ fontSize: '1.1rem', textDecoration: 'underline' }}>{getCategoryIcon(p.category)} {p.name}</strong>
+                  </button>
+                  <br />
                   {p.category && <small style={{ color: 'var(--color-secondary)' }}>📂 {p.category}</small>}
                   <br />
                   <small style={{ color: 'var(--color-secondary)' }}>🏠 {p.address || `${p.lat}, ${p.lng}`}</small> <br />
