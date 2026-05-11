@@ -329,20 +329,29 @@ const RuteandoApp = () => {
                   marginBottom: '1rem',
                   borderLeft: '5px solid var(--color-primary)'
                 }}>
-                  <button
-                    type="button"
-                    onClick={() => focusPlaceOnMap(p)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      color: 'inherit'
-                    }}
-                  >
-                    <strong style={{ fontSize: '1.1rem', textDecoration: 'underline' }}>{getCategoryIcon(p.category)} {p.name}</strong>
-                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <strong style={{ fontSize: '1.1rem' }}>{getCategoryIcon(p.category)} {p.name}</strong>
+                    <button
+                      type="button"
+                      onClick={() => focusPlaceOnMap(p)}
+                      aria-label={`Ir a ${p.name} en el mapa`}
+                      title="Ir al mapa"
+                      style={{
+                        border: '1px solid rgba(74, 74, 74, 0.2)',
+                        borderRadius: '999px',
+                        background: '#fff',
+                        width: '34px',
+                        height: '34px',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1rem'
+                      }}
+                    >
+                      🛩️
+                    </button>
+                  </div>
                   <br />
                   {p.category && <small style={{ color: 'var(--color-secondary)' }}>📂 {p.category}</small>}
                   <br />
