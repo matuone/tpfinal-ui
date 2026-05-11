@@ -145,6 +145,69 @@ Reemplaza modales nativos de navegador por modales visualmente consistentes con 
 Agrega selector de categorías al crear lugares, muestra dirección legible en lugar de coordenadas, e implementa filtrado por nombre y categoría con UI colapsable.
 ```
 
+## Cobertura de consigna
+
+### 1. Pre-desarrollo con IA
+
+La definición del producto también se documenta aquí para que el repositorio frontend sea autosuficiente en la entrega.
+
+Identidad del producto:
+
+- Nombre: Ruteando
+- Descripción: bitácora personal de exploración física
+- Público objetivo: personas que recorren la ciudad y quieren guardar lugares favoritos desde el celular
+- Propuesta de valor: registrar lugares reales al instante y revisarlos luego en un mapa propio
+
+Prompt base usado en pre-desarrollo:
+
+```text
+Quiero una idea de app mobile-first para registrar lugares reales visitados por una persona. Necesito nombre, público objetivo, propuesta de valor y una identidad simple.
+```
+
+Iteración 1 del prompt:
+
+```text
+Quiero una idea de app mobile-first enfocada en exploración urbana. Debe sentirse personal, simple y útil para registrar lugares favoritos desde el celular. Dame nombre, descripción, público objetivo, propuesta de valor y tono de marca. Evita una red social y prioriza una bitácora personal con mapa.
+```
+
+Iteración 2 del prompt:
+
+```text
+Sobre la propuesta anterior, ajusta la identidad para que sea clara para Argentina: define nombre final, slogan corto, perfil de usuario principal, problema concreto que resuelve en salidas diarias y 3 diferenciales frente a usar notas del celular.
+```
+
+### 2. Desarrollo
+
+Requisitos cubiertos por este repositorio:
+
+- interfaz para consumir la API
+- login y registro
+- mapa y bitácora de lugares
+- soporte visual para tickets y métricas
+- documentación del uso de IA para UI, debugging y decisiones de UX
+
+### 3. Post-desarrollo
+
+Requisitos cubiertos por este repositorio:
+
+- vista para crear y visualizar tickets
+- vista para consultar métricas operativas
+- soporte visual para simular la etapa posterior al lanzamiento
+
+Prompt usado para análisis post-desarrollo:
+
+```text
+Con estas métricas de soporte: tickets por estado, tickets por prioridad, errores en 7 días y fallos de login, redacta conclusiones breves sobre estabilidad del producto y próximas mejoras recomendadas.
+```
+
+### Entregables y bonus cubiertos
+
+- repositorio frontend
+- README con descripción, ejecución y uso de IA
+- deploy productivo en Vercel
+- bonus: autenticación integrada con JWT
+- bonus: dashboard simple de métricas
+
 ## Nota
 
 La documentación completa del proyecto se encuentra en `../README.md`.
