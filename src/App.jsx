@@ -30,19 +30,26 @@ const RuteandoApp = () => {
   });
 
   const { places, addNewPlace, updateExistingPlace, deleteExistingPlace } = usePlaces();
-  const { token, handleLogout } = useContext(AuthContext);
+  const { user, handleLogout } = useContext(AuthContext);
+  const token = user?.token ?? localStorage.getItem('token');
+
+  const fallbackCategories = ['Restaurante', 'Parque', 'Museo', 'Tienda', 'Playa', 'Montaña', 'Otro'];
 
   // Cargar categorías
   useEffect(() => {
     const loadCategories = async () => {
       try {
         const data = await getCategories(token);
-        setCategories(data.categories || []);
+        const nextCategories = Array.isArray(data.categories) && data.categories.length > 0
+          ? data.categories
+          : fallbackCategories;
+        setCategories(nextCategories);
       } catch (error) {
         console.error('Error cargando categorías:', error);
+        setCategories(fallbackCategories);
       }
     };
-    if (token) loadCategories();
+    loadCategories();
   }, [token]);
 
   const openInfoModal = (title, message) => {
