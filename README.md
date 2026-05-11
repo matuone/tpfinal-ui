@@ -10,6 +10,7 @@ Frontend desarrollado con React y Vite.
 - **categorización de lugares** (Restaurante, Parque, Museo, Tienda, Playa, Montaña, Otro)
 - **dirección legible** obtenida automáticamente desde coordenadas (geocodificación inversa)
 - **filtrado avanzado** de lugares por nombre y categoría
+- **navegación rápida al mapa** desde la bitácora con acción por ícono (avión)
 - vista de soporte con tickets y métricas
 - modales personalizados centrados para feedback, confirmaciones y edición
 
@@ -73,6 +74,25 @@ Archivos involucrados:
 - `src/App.jsx` - UI de filtros y lógica de filtrado
 - `src/services/placesService.js` - función `getPlaces()` con query params
 
+### Navegar desde bitácora al mapa
+
+- Cada tarjeta de la bitácora incluye una acción con ícono de avión para centrar el mapa en ese lugar.
+- Al usarla, la pantalla hace scroll suave hacia el mapa para confirmar visualmente el foco.
+
+Archivos involucrados:
+
+- `src/App.jsx` - acción de navegación y foco por coordenadas
+- `src/components/Map.jsx` - consumo de `focusedCoords` para recentrar mapa
+
+### Estabilidad de mapa (Leaflet)
+
+- Se desactivaron animaciones de zoom/transición que en Safari/iOS podían disparar errores internos de Leaflet.
+- El recentrado del mapa ahora valida contenedor antes de aplicar `setView`.
+
+Archivos involucrados:
+
+- `src/components/Map.jsx`
+
 ## Ejecución
 
 ```bash
@@ -96,6 +116,8 @@ Para producción (Vercel), usar la URL pública de Render:
 ```env
 VITE_API_URL=https://tu-backend-en-render.onrender.com
 ```
+
+Además, para SPA en Vercel se utiliza `vercel.json` con rewrites hacia `index.html`.
 
 ## Rutas principales
 

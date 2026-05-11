@@ -329,25 +329,14 @@ const RuteandoApp = () => {
                   marginBottom: '1rem',
                   borderLeft: '5px solid var(--color-primary)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div className="place-title-row">
                     <strong style={{ fontSize: '1.1rem' }}>{getCategoryIcon(p.category)} {p.name}</strong>
                     <button
                       type="button"
                       onClick={() => focusPlaceOnMap(p)}
+                      className="icon-action-btn"
                       aria-label={`Ir a ${p.name} en el mapa`}
                       title="Ir al mapa"
-                      style={{
-                        border: '1px solid rgba(74, 74, 74, 0.2)',
-                        borderRadius: '999px',
-                        background: '#fff',
-                        width: '34px',
-                        height: '34px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1rem'
-                      }}
                     >
                       🛩️
                     </button>
@@ -370,7 +359,7 @@ const RuteandoApp = () => {
                   <div style={{ marginTop: '0.5rem', display: 'flex', gap: '10px' }}>
                     <button
                       type="button"
-                      className="btn-secondary"
+                      className="icon-action-btn"
                       onClick={() => {
                         setModal({
                           isOpen: true,
@@ -396,7 +385,7 @@ const RuteandoApp = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn-danger"
+                      className="icon-action-btn danger"
                       onClick={() => {
                         setModal({
                           isOpen: true,
