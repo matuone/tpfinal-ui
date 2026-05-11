@@ -39,6 +39,20 @@ npm run dev
 
 La API debe estar levantada en `http://localhost:3000`.
 
+## Variables de entorno
+
+Crear `ui/.env` desde `ui/.env.example`.
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+Para producción (Vercel), usar la URL pública de Render:
+
+```env
+VITE_API_URL=https://tu-backend-en-render.onrender.com
+```
+
 ## Rutas principales
 
 - `/`: autenticación
