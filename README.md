@@ -7,6 +7,9 @@ Frontend desarrollado con React y Vite.
 - registro e inicio de sesión
 - visualización de lugares en mapa
 - bitácora de lugares del usuario autenticado
+- **categorización de lugares** (Restaurante, Parque, Museo, Tienda, Playa, Montaña, Otro)
+- **dirección legible** obtenida automáticamente desde coordenadas (geocodificación inversa)
+- **filtrado avanzado** de lugares por nombre y categoría
 - vista de soporte con tickets y métricas
 - modales personalizados centrados para feedback, confirmaciones y edición
 
@@ -28,6 +31,47 @@ Archivos involucrados:
 - `src/views/Auth.jsx`
 - `src/views/Support.jsx`
 - `src/styles/index.css`
+
+## Nuevas características: Categorías, Dirección y Filtrado
+
+### Categorías
+
+Cada lugar puede tener una categoría:
+- Restaurante 🍽️
+- Parque 🌳
+- Museo 🎨
+- Tienda 🏪
+- Playa 🏖️
+- Montaña ⛰️
+- Otro 📍
+
+Archivos involucrados:
+
+- `src/App.jsx` - dropdown de categorías al crear lugar
+- `src/services/placesService.js` - función `getCategories()` y soporte en `addPlace()`
+- `src/context/PlacesContext.jsx` - actualización de `addNewPlace()` para pasar categoría
+
+### Dirección legible
+
+Al crear o editar un lugar, la API obtiene automáticamente la dirección usando OpenStreetMap Nominatim. Ejemplo:
+
+- Coordenadas: `-34.6037, -58.3816`
+- Dirección: `Calle Florida, Buenos Aires`
+
+Se muestra en la bitácora con ícono 🏠.
+
+### Filtrado avanzado
+
+La sección de filtros permite:
+- **Búsqueda por nombre**: text input que filtra en tiempo real
+- **Filtrar por categoría**: dropdown con todas las categorías disponibles
+- Vista contraída/expandida (botón toggle)
+- Contador de resultados
+
+Archivos involucrados:
+
+- `src/App.jsx` - UI de filtros y lógica de filtrado
+- `src/services/placesService.js` - función `getPlaces()` con query params
 
 ## Ejecución
 
@@ -66,11 +110,16 @@ Prompts aplicados en frontend:
 - mejora de experiencia visual con modales propios en lugar de `alert/prompt/confirm`
 - definición de flujo para soporte y métricas consumiendo la API
 - ajuste de UX para fallback de ubicación manual cuando el navegador entrega geolocalización imprecisa
+- **implementación de categorías, dirección legible y filtrado avanzado** para organizar y buscar lugares
 
-Prompt representativo:
+Prompts representativos:
 
 ```text
 Reemplaza modales nativos de navegador por modales visualmente consistentes con la app, centrados, con overlay y animación suave, manteniendo los flujos de confirmación y edición.
+```
+
+```text
+Agrega selector de categorías al crear lugares, muestra dirección legible en lugar de coordenadas, e implementa filtrado por nombre y categoría con UI colapsable.
 ```
 
 ## Nota

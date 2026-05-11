@@ -4,11 +4,20 @@ import { usePlaces } from './context/PlacesContext';
 import { RuteandoMap } from './components/Map';
 import { AuthContext } from './context/AuthContext';
 import { AppModal } from './components/AppModal.jsx';
+import { getCategories } from './services/placesService';
 
 const RuteandoApp = () => {
   const [placeName, setPlaceName] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Otro');
   const [isMobileDevice, setIsMobileDevice] = useState(true);
   const [selectedCoords, setSelectedCoords] = useState(null);
+  const [categories, setCategories] = useState([]);
+
+  // Filtros
+  const [filterName, setFilterName] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+
   const [modal, setModal] = useState({
     isOpen: false,
     type: 'info',
@@ -21,7 +30,20 @@ const RuteandoApp = () => {
   });
 
   const { places, addNewPlace, updateExistingPlace, deleteExistingPlace } = usePlaces();
-  const { handleLogout } = useContext(AuthContext);
+  const { token, handleLogout } = useContext(AuthContext);
+
+  // Cargar categorías
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await getCategories(token);
+        setCategories(data.categories || []);
+      } catch (error) {
+        console.error('Error cargando categorías:', error);
+      }
+    };
+    if (token) loadCategories();
+  }, [token]);
 
   const openInfoModal = (title, message) => {
     setModal({
@@ -110,9 +132,10 @@ const RuteandoApp = () => {
       await addNewPlace(placeName, {
         lat: selectedCoords[0],
         lng: selectedCoords[1],
-      });
+      }, selectedCategory);
 
       setPlaceName('');
+      setSelectedCategory('Otro');
       setSelectedCoords(null);
       openInfoModal('Lugar guardado', '📍 ¡Lugar guardado con el punto manual del mapa!');
       return;
@@ -139,8 +162,9 @@ const RuteandoApp = () => {
         lng: Number(pos.coords.longitude.toFixed(6)),
       };
 
-      await addNewPlace(placeName, coords);
+      await addNewPlace(placeName, coords, selectedCategory);
       setPlaceName('');
+      setSelectedCategory('Otro');
       setSelectedCoords(null);
       openInfoModal('Lugar guardado', `📍 ¡Lugar guardado con éxito! Precisión aprox: ${accuracy} m.`);
     } catch (error) {
@@ -148,6 +172,27 @@ const RuteandoApp = () => {
       console.log(error);
     }
   };
+
+  // Ícono por categoría
+  const getCategoryIcon = (category) => {
+    const icons = {
+      'Restaurante': '🍽️',
+      'Parque': '🌳',
+      'Museo': '🎨',
+      'Tienda': '🏪',
+      'Playa': '🏖️',
+      'Montaña': '⛰️',
+      'Otro': '📍'
+    };
+    return icons[category] || '📍';
+  };
+
+  // Filtrar lugares según criterios
+  const filteredPlaces = places.filter(p => {
+    const matchesName = filterName === '' || p.name.toLowerCase().includes(filterName.toLowerCase());
+    const matchesCategory = filterCategory === '' || p.category === filterCategory;
+    return matchesName && matchesCategory;
+  });
 
   if (!isMobileDevice) {
     return (
@@ -178,6 +223,18 @@ const RuteandoApp = () => {
           placeholder="Nombre del sitio (ej: Mi café favorito)"
           onChange={(e) => setPlaceName(e.target.value)}
         />
+
+        <select
+          className="input-field"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          style={{ marginTop: '0.5rem' }}
+        >
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{getCategoryIcon(cat)} {cat}</option>
+          ))}
+        </select>
+
         <button className="btn-primary">
           Registrar este lugar
         </button>
@@ -194,13 +251,54 @@ const RuteandoApp = () => {
         onSelectedCoordsChange={setSelectedCoords}
       />
 
+      <div className="filters-section" style={{ marginTop: '2rem', background: '#f9f9f9', padding: '1rem', borderRadius: 'var(--radius)' }}>
+        <button
+          type="button"
+          onClick={() => setShowFilters(!showFilters)}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            color: 'var(--color-primary)',
+            fontWeight: 'bold',
+            width: '100%',
+            textAlign: 'left'
+          }}
+        >
+          {showFilters ? '▼' : '▶'} Filtros {filteredPlaces.length !== places.length && `(${filteredPlaces.length}/${places.length})`}
+        </button>
+
+        {showFilters && (
+          <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
+            <input
+              type="text"
+              className="input-field"
+              placeholder="Buscar por nombre..."
+              value={filterName}
+              onChange={(e) => setFilterName(e.target.value)}
+            />
+            <select
+              className="input-field"
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            >
+              <option value="">Todas las categorías</option>
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{getCategoryIcon(cat)} {cat}</option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+
       <div className="history-section" style={{ marginTop: '2.5rem' }}>
         <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Bitácora de sitios</h2>
-        {places.length === 0 ? (
+        {filteredPlaces.length === 0 ? (
           <p style={{ color: '#999', fontStyle: 'italic' }}>Tu mapa aún está vacío. ¡Sal a explorar!</p>
         ) : (
           <ul style={{ listStyle: 'none' }}>
-            {places.map(p => {
+            {filteredPlaces.map(p => {
               const { _id: id } = p;
               return (
                 <li key={id} style={{
@@ -210,8 +308,10 @@ const RuteandoApp = () => {
                   marginBottom: '1rem',
                   borderLeft: '5px solid var(--color-primary)'
                 }}>
-                  <strong style={{ fontSize: '1.1rem' }}>{p.name}</strong> <br />
-                  <small style={{ color: 'var(--color-secondary)' }}>📍 {p.lat} {p.lng}</small> <br />
+                  <strong style={{ fontSize: '1.1rem' }}>{getCategoryIcon(p.category)} {p.name}</strong> <br />
+                  {p.category && <small style={{ color: 'var(--color-secondary)' }}>📂 {p.category}</small>}
+                  <br />
+                  <small style={{ color: 'var(--color-secondary)' }}>🏠 {p.address || `${p.lat}, ${p.lng}`}</small> <br />
                   <small style={{ color: '#bbb' }}>
                     Registrado el {new Date(p.date).toLocaleString('es-AR', {
                       year: 'numeric',

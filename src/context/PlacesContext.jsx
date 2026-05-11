@@ -31,9 +31,9 @@ export const PlacesProvider = ({ children }) => {
   }, [token]);
 
   // Funciones expuestas
-  const addNewPlace = async (name, coords) => {
+  const addNewPlace = async (name, coords, category = 'Otro') => {
     try {
-      const newPlace = await addPlace(name, coords, token);
+      const newPlace = await addPlace(name, coords, token, category);
       setPlaces(prev => [newPlace, ...prev]);
       return newPlace;
     } catch (error) {
