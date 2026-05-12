@@ -2,6 +2,15 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const API_URL = `${API_BASE_URL}/places`;
 
+// Lanza error y dispara cierre de sesión si el token expiró
+const checkAuthError = (response) => {
+  if (response.status === 401 || response.status === 403) {
+    window.dispatchEvent(new Event("session-expired"));
+    throw new Error("Sesión expirada");
+  }
+  if (!response.ok) throw new Error(`Error ${response.status}`);
+};
+
 // Obtener categorías disponibles
 export const getCategories = async (token) => {
   const response = await fetch(`${API_URL}/categories/list`, {
@@ -11,7 +20,7 @@ export const getCategories = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (!response.ok) throw new Error("Error al obtener categorías");
+  checkAuthError(response);
   return await response.json();
 };
 
@@ -37,7 +46,7 @@ export const getPlaces = async (token, filters = {}) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (!response.ok) throw new Error("Error al obtener lugares");
+  checkAuthError(response);
   return await response.json();
 };
 
@@ -50,7 +59,7 @@ export const getPlaceById = async (id, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (!response.ok) throw new Error("Lugar no encontrado");
+  checkAuthError(response);
   return await response.json();
 };
 
@@ -67,7 +76,7 @@ export const addPlace = async (name, coords, token, category = "Otro") => {
     },
     body: JSON.stringify({ name, lat, lng, category }),
   });
-  if (!response.ok) throw new Error("Error al crear lugar");
+  checkAuthError(response);
   return await response.json();
 };
 
@@ -81,7 +90,7 @@ export const updatePlace = async (id, updatedFields, token) => {
     },
     body: JSON.stringify(updatedFields),
   });
-  if (!response.ok) throw new Error("Error al actualizar lugar");
+  checkAuthError(response);
   return await response.json();
 };
 
@@ -94,6 +103,6 @@ export const deletePlace = async (id, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (!response.ok) throw new Error("Error al eliminar lugar");
+  checkAuthError(response);
   return await response.json();
 };
