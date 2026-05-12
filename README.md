@@ -96,7 +96,7 @@ Archivos involucrados:
 
 ## Cierre automático de sesión
 
-Se implementó un sistema de expiración de sesión en el frontend con dos mecanismos:
+Se implementó un sistema de expiración de sesión en el frontend con tres mecanismos:
 
 ### 1. Verificación al montar
 
