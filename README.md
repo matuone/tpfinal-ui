@@ -94,6 +94,27 @@ Archivos involucrados:
 
 - `src/components/Map.jsx`
 
+## Cierre automático de sesión
+
+Se implementó un sistema de expiración de sesión en el frontend con dos mecanismos:
+
+### 1. Verificación al montar
+
+Al cargar la app, si hay un token guardado en `localStorage`, se decodifica el campo `exp` del JWT. Si ya expiró, se limpia la sesión automáticamente sin necesidad de llamar al backend.
+
+### 2. Timer de inactividad
+
+Si el usuario no interactúa con la app durante 60 minutos (`click`, `touchstart`, `keydown`), la sesión se cierra automáticamente. El timer se reinicia con cada interacción.
+
+### 3. Interceptor de errores 401/403
+
+Si cualquier llamada a la API devuelve `401` o `403` (token inválido o expirado en servidor), se dispara el evento global `session-expired` y `AuthContext` cierra la sesión sin requerir acción del usuario.
+
+Archivos involucrados:
+
+- `src/context/AuthContext.jsx` - timer de inactividad, verificación de expiración al montar y listener del evento
+- `src/services/placesService.js` - helper `checkAuthError()` que dispara el evento en respuestas 401/403
+
 ## Ejecución
 
 ```bash
