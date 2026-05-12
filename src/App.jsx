@@ -322,6 +322,7 @@ const RuteandoApp = () => {
           <ul style={{ listStyle: 'none' }}>
             {filteredPlaces.map(p => {
               const { _id: id } = p;
+              const hasResolvedAddress = p.address && p.address !== 'Ubicación desconocida';
               return (
                 <li key={id} style={{
                   background: 'white',
@@ -345,7 +346,9 @@ const RuteandoApp = () => {
                   <br />
                   {p.category && <small style={{ color: 'var(--color-secondary)' }}>📂 {p.category}</small>}
                   <br />
-                  <small style={{ color: 'var(--color-secondary)' }}>🏠 {p.address || `${p.lat}, ${p.lng}`}</small> <br />
+                  <small style={{ color: 'var(--color-secondary)' }}>
+                    🏠 {hasResolvedAddress ? p.address : `${p.lat}, ${p.lng}`}
+                  </small> <br />
                   <small style={{ color: '#bbb' }}>
                     Registrado el {new Date(p.date).toLocaleString('es-AR', {
                       year: 'numeric',
